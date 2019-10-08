@@ -1,0 +1,18 @@
+{
+  "name": "nostra_workshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "http-server": "^0.11.1",
+    "local-web-server": "^3.0.7",
+    "node": "^12.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "http-server ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
