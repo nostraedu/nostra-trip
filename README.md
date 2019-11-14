@@ -1,53 +1,54 @@
 # nostra-trip
 the example for use Nostra Javascript API.
 
-
+> npm start
+> feel free dev Nostra-trip on: http://127.0.0.1/src/index.html 
 
 1. สร้าง event document ready และนำ code ในขั้นตอนถัดๆ ไปใส่ function นี้
-   =======================================================================================
-   
+=======================================================================================
 
-   ```javascript
-   $(document).ready(function () {
-   
-   });
-   ```
+```javascript
+$(document).ready(function () {
+
+});
+```
 
 2. ประกาศตัวตัวแปร 
 =======================================================================================
-   ```javascript
-    var basemap, speialLayer,
-        locations = [], latCurrent,
-        lonCurrent, pointLayer, routeLayer,
-        gpMarkerPoint = null,
-        enableMapClick = false,
-        routeOption;
-   ```
+
+```javascript
+var basemap, speialLayer,
+    locations = [], latCurrent,
+    lonCurrent, pointLayer, routeLayer,
+    gpMarkerPoint = null,
+    enableMapClick = false,
+    routeOption;
+```
    
    
 
 
 3. เรียกใช้งาน class nostra.maps.Map
-  =======================================================================================
-  ```javascript
-  nostra.onready = function () {
-   	nostra.config.Language.setLanguage(nostra.language.L);
-  
-       map = new nostra.maps.Map("divMap", {
-           id: "mapTest",
-           logo: true,
-           scalebar: true,
-           basemap: "streetmap",
-           slider: true,
-           level: 10,
-           lat: 13.7262435,
-           lon: 100.5373896
-       });
-  
-       initGraphicLayer();
-       initYourLocation();
-  };
-  ```
+=======================================================================================
+```javascript
+nostra.onready = function () {
+nostra.config.Language.setLanguage(nostra.language.L);
+
+    map = new nostra.maps.Map("divMap", {
+        id: "mapTest",
+        logo: true,
+        scalebar: true,
+        basemap: "streetmap",
+        slider: true,
+        level: 10,
+        lat: 13.7262435,
+        lon: 100.5373896
+    });
+
+    initGraphicLayer();
+    initYourLocation();
+};
+```
 
   
 
@@ -80,7 +81,7 @@ function initYourLocation() {
     	navigator.geolocation.getCurrentPosition(function (position) {
 
     	var marker = new nostra.maps.symbols.Marker({
-            url: "https://png.pngtree.com/png-clipart/20190516/original/pngtree-vector-location-icon-png-image_3778133.jpg",
+            url: "/src/images/pin_margin@2x.png",
             width: 60,
             height: 60,
             draggable: false,
@@ -155,17 +156,18 @@ function initYourLocation() {
 
 
 9. สร้าง removeLocation() เพื่อลบตำแหน่ง และลบ pin ของ location  
-  =======================================================================================
-  ```javascript
-   function removeLocation(index) {
-       pointLayer.removeGraphic(locations[index].gpMaker);
-       locations = locations.filter(function (obj, findex) {
-           return index != findex
-       })
-       routeLayer.clear();
-       createLocationList();
-  }
-  ```
+=======================================================================================
+
+```javascript
+function removeLocation(index) {
+    pointLayer.removeGraphic(locations[index].gpMaker);
+    locations = locations.filter(function (obj, findex) {
+        return index != findex
+    })
+    routeLayer.clear();
+    createLocationList();
+}
+```
 
   
 
@@ -224,67 +226,70 @@ document.getElementById("btnCreateLocation").onclick = function () {
 
 8. เพิ่ม event เพื่อบันทึกตำแหน่ง location เมื่อมีการคลิกที่ map
 =======================================================================================
-- ```javascript
-  - nostra.onready = function () {
-  - nostra.config.Language.setLanguage(nostra.language.L);
-  - 
-  - map = new nostra.maps.Map("divMap", {
-  - id: "mapTest",
-  - logo: true,
-  - scalebar: true,
-  - basemap: "streetmap",
-  - slider: true,
-  - level: 10,
-  - lat: 13.7262435,
-  - lon: 100.5373896
-  - });
-  - 
-  - initGraphicLayer();
-  - initYourLocation();
-  - 
-  
-  + map.events.click = function (evt) {
-  + 	handleAddLocation(evt.mapPoint.getLatitude(), evt.mapPoint.getLongitude());
-  + }
-  
-  - };
-  ```
+
+```javascript
+- nostra.onready = function () {
+- nostra.config.Language.setLanguage(nostra.language.L);
+- 
+- map = new nostra.maps.Map("divMap", {
+- id: "mapTest",
+- logo: true,
+- scalebar: true,
+- basemap: "streetmap",
+- slider: true,
+- level: 10,
+- lat: 13.7262435,
+- lon: 100.5373896
+- });
+- 
+- initGraphicLayer();
+- initYourLocation();
+- 
+
++ map.events.click = function (evt) {
++ 	handleAddLocation(evt.mapPoint.getLatitude(), evt.mapPoint.getLongitude());
++ }
+
+- };
+```
 
   
 9. สร้าง addLocation() เพื่อบันทึกตำแหน่ง และสร้าง pin ของ location  
-  =======================================================================================
-  ```javascript
-  function addLocation(lat, lon) {
-   if (gpMarkerPoint == null && enableMapClick) {
-       latCurrent = lat;
-       lonCurrent = lon;
-  
-   callIdentifyService();
-  
-   var pointMarker = new nostra.maps.symbols.Marker({
-       width: 60,
-       height: 60,
-       draggable: true
-   });
-  
-   pointMarker.onDragEnd = function (point) {
-       latCurrent = point.lat;
-       lonCurrent = point.lon;
-       callIdentifyService(point.lat, point.lon);
-   }
-  
-   var gp = pointLayer.addMarker(latCurrent, lonCurrent, pointMarker);
-   gpMarkerPoint = gp;
-   }
-  }
-  ```
+=======================================================================================
+
+```javascript
+function addLocation(lat, lon) {
+if (gpMarkerPoint == null && enableMapClick) {
+    latCurrent = lat;
+    lonCurrent = lon;
+
+callIdentifyService();
+
+var pointMarker = new nostra.maps.symbols.Marker({
+    width: 60,
+    height: 60,
+    draggable: true
+});
+
+pointMarker.onDragEnd = function (point) {
+    latCurrent = point.lat;
+    lonCurrent = point.lon;
+    callIdentifyService(point.lat, point.lon);
+}
+
+var gp = pointLayer.addMarker(latCurrent, lonCurrent, pointMarker);
+gpMarkerPoint = gp;
+}
+}
+```
 
   
 
 10. สร้าง function callIdentifyService() เพื่อนำข้อมุลที่ได้มาใช้เป็นชื่อของตำแหน่ง
-    =======================================================================================
-    ```javascript
-    function callIdentifyService() {
+=======================================================================================
+
+```javascript
+function callIdentifyService() {
     locationTextLoading(true);
     var key = "{API-KEY}";
     var url = "https://api.nostramap.com/Service/V2/Location/Identify?key=" + key + "&lat=" + latCurrent + "&lon=" + lonCurrent
@@ -303,81 +308,70 @@ document.getElementById("btnCreateLocation").onclick = function () {
             console.log("nostra identify error: ", err);
         }
     });
-    }
-    ```
+}
+```
 
     
 
 
 10. กำหนดการทำงาน textbox locationNameInput
-    =======================================================================================
-    ```javascript
-    function locationTextLoading(isLoad) {
+=======================================================================================
+
+```javascript
+function locationTextLoading(isLoad) {
     document.getElementById("locationNameInput").value = "";
     document.getElementById("locationNameInput").placeholder = (isLoad) ? "name of location loading..." : "";
-    }
-    ```
+}
+```
 
-    
+11. กำหนดการทำงานเมื่อสร้าง location ใหม่
+=======================================================================================
 
-11. กำหนดการทำงาน textbox locationNameInput
-    =======================================================================================
-    ```javascript
-    function locationTextLoading(isLoad) {
-        document.getElementById("locationNameInput").value = "";
-        document.getElementById("locationNameInput").placeholder = (isLoad) ? "name of location loading..." : "";
-    }
-    ```
+```javascript
+document.getElementById("btnAddLocation").onclick = function () {
+document.getElementById("createPinPanal").style.display = "none";
+document.getElementById("btnCreateLocation").style.display = "block";
 
-    
+var name = document.getElementById("locationNameInput").value;
+var desc = document.getElementById("descriptionInput").value;
 
-12. กำหนดการทำงานเมื่อสร้าง location ใหม่
-    =======================================================================================
-    ```javascript
-    document.getElementById("btnAddLocation").onclick = function () {
-    document.getElementById("createPinPanal").style.display = "none";
-    document.getElementById("btnCreateLocation").style.display = "block";
-    
-    var name = document.getElementById("locationNameInput").value;
-    var desc = document.getElementById("descriptionInput").value;
-    
-    enableMapClick = false;
-    pointLayer.removeGraphic(gpMarkerPoint);
-    gpMarkerPoint = null;
-    
-    var callout = new nostra.maps.CustomCallout({
-        content: name,
-        width: 100,
-        height: 100,
-    });
-    
-    var marker = new nostra.maps.symbols.Marker({
-        url: "https://png.pngtree.com/png-clipart/20190516/original/pngtree-vector-location-icon-png-image_3778133.jpg",
-        width: 60,
-        height: 60,
-        draggable: false,
-        customCallout: callout
-    });
-    var locaitonMarker = pointLayer.addMarker(latCurrent, lonCurrent, marker);
-    
-    var obj = {
-        id: locations.length + 1,
-        name: name,
-        description: desc,
-        lat: latCurrent,
-        lon: lonCurrent,
-        gpMaker: locaitonMarker
-    }
-    locations.push(obj);
-    createLocationList();
-    }
-    ```
+enableMapClick = false;
+pointLayer.removeGraphic(gpMarkerPoint);
+gpMarkerPoint = null;
+
+var callout = new nostra.maps.CustomCallout({
+    content: name,
+    width: 100,
+    height: 100,
+});
+
+var marker = new nostra.maps.symbols.Marker({
+    url: "https://png.pngtree.com/png-clipart/20190516/original/pngtree-vector-location-icon-png-image_3778133.jpg",
+    width: 60,
+    height: 60,
+    draggable: false,
+    customCallout: callout
+});
+var locaitonMarker = pointLayer.addMarker(latCurrent, lonCurrent, marker);
+
+var obj = {
+    id: locations.length + 1,
+    name: name,
+    description: desc,
+    lat: latCurrent,
+    lon: lonCurrent,
+    gpMaker: locaitonMarker
+}
+locations.push(obj);
+createLocationList();
+}
+```
 
     
 
 12. กำหนดค่าเริ่มต้นของ route
 =======================================================================================
-- ```javascript
+ ```javascript
   - nostra.onready = function () {
   - nostra.config.Language.setLanguage(nostra.language.L);
   - 
@@ -407,21 +401,20 @@ document.getElementById("btnCreateLocation").onclick = function () {
   - initYourLocation();
   - 
   - map.events.click = function (evt) {
-  - handleAddLocation(evt.mapPoint.getLatitude(), evt.mapPoint.getLongitude());
+  -     handleAddLocation(evt.mapPoint.getLatitude(), evt.mapPoint.getLongitude());
   - }
   - };
   ```
 
   
 13. กำหนดการทำงานเมื่อทำการกด route เส้นทาง
-    =======================================================================================
-    ```javascript
-    document.getElementById("btnRoute").onclick = function () {
-        direction();
-    }
-    ```
+=======================================================================================
 
-    
+```javascript
+document.getElementById("btnRoute").onclick = function () {
+    direction();
+}
+```
 
 
 14. สร้าง เพื่อวาดเส้นทาง และคำนวณเส้นทาง
@@ -431,19 +424,19 @@ document.getElementById("btnCreateLocation").onclick = function () {
 function direction() {
     routeLayer.clear();
 
-var route = new nostra.services.network.route();
-route.clearStopPoint();
-route.country = "TH";
-route.returnedRouteDetail = true;
-route.preserveFirstStop = true;
+    var route = new nostra.services.network.route();
+    route.clearStopPoint();
+    route.country = "TH";
+    route.returnedRouteDetail = true;
+    route.preserveFirstStop = true;
 
-route.impedance = routeOption.impedance;
-route.mode = routeOption.mode;
-route.tollroad = routeOption.tollroad;
-route.findBestSequence = routeOption.findBestSequence;
-route.preserveLastStop = routeOption.preserveLastStop;
+    route.impedance = routeOption.impedance;
+    route.mode = routeOption.mode;
+    route.tollroad = routeOption.tollroad;
+    route.findBestSequence = routeOption.findBestSequence;
+    route.preserveLastStop = routeOption.preserveLastStop;
 
-locations.map(function (location, index) {
+    locations.map(function (location, index) {
     var stop = new nostra.services.network.stopPoint({
         name: location.name,
         lat: location.lat,
@@ -466,9 +459,10 @@ route.solve(function (solveResult) {
 
 
 15. เรียงลำดับของตำแหน่ง location
+=======================================================================================
 
-    ```javascript
-    function reOrderLocaitons(stops) {
+```javascript
+function reOrderLocaitons(stops) {
     var newLocations = [];
     stops.map(function (stop) {
         var result = locations.filter(function (location) {
@@ -478,22 +472,23 @@ route.solve(function (solveResult) {
     });
     locations = newLocations;
     createLocationList();
-    }
-    ```
+}
+```
 
     
 
 16.  นำข้อมูลที่ได้จากการ route มาคำนวณระยะทางเวลา
+=======================================================================================
 
-    ```javascript
-    function showRouteResult(distance, time) {
-        var calTime = parseFloat((time / 60)).toFixed(0) + " hr. " + parseFloat((time % 60)).toFixed(0) + " min.";
-        var calDistance = parseFloat(distance / 1000).toFixed(2) + ' Km';
-    
+```javascript
+function showRouteResult(distance, time) {
+    var calTime = parseFloat((time / 60)).toFixed(0) + " hr. " + parseFloat((time % 60)).toFixed(0) + " min.";
+    var calDistance = parseFloat(distance / 1000).toFixed(2) + ' Km';
+
     document.getElementById("divTime").innerText = calTime;
     document.getElementById("divDistance").innerText = calDistance;
-    
-     if (routeOption.mode == nostra.services.network.mode.CAR || routeOption.mode == nostra.services.network.mode.MOTORCYCLE) {
+
+    if (routeOption.mode == nostra.services.network.mode.CAR || routeOption.mode == nostra.services.network.mode.MOTORCYCLE) {
             var calFuelConsumption = (parseFloat((distance / 1000) / 14)).toFixed(2) + " L.";
             var calEstFuelCost = "฿" + (parseFloat(((distance / 1000) / 14) * 35.36).toFixed(2));
     
@@ -504,14 +499,13 @@ route.solve(function (solveResult) {
         document.getElementById("divFuelConsumption").innerText = "";
         document.getElementById("divEstFuelCost").innerText = "";
     }
-    
-    
-    }
-    ```
+}
+```
 
     
 
 17. เพิ่ม option route
+=======================================================================================
 
 ```javascript
 document.getElementById("btnCar").onclick = function () {
